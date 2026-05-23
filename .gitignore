@@ -1,6 +1,53 @@
-.vscode
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Environment files with secrets
+.env
+.env.*
+!.env.example
+!.env.default
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node / frontend
 node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Playwright and test output
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/playwright/.cache/
+
+# Docker and local runtime data
+*.log
+*.pid
+*.sqlite
+*.sqlite3
+
+# Build artifacts
+dist/
+build/
+coverage/

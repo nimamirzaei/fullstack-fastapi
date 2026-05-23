@@ -1,5 +1,22 @@
 # Full Stack FastAPI Template
 
+Development uses docker-compose.override.yml.
+Production uses docker-compose.yml with docker-compose.traefik.yml.
+The override file enables hot reload, local ports, Mailcatcher, Adminer, and insecure Traefik dashboard.
+Production enables HTTPS through Traefik and Let's Encrypt, restart policies, persistent database volume, and domain-based routing.
+
+Dev:
+docker compose --env-file .env.dev up --build
+
+Prod:
+docker network create traefik-public
+docker compose \
+  --env-file .env.prod \
+  -f docker-compose.traefik.yml \
+  -f docker-compose.yml \
+  -f /dev/null \
+  up -d --build
+
 <a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
 <a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fastapi/full-stack-fastapi-template" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fastapi/full-stack-fastapi-template.svg" alt="Coverage"></a>
 
