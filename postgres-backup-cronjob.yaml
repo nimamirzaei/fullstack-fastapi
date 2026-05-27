@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-dev-backup
+  namespace: dev
+spec:
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: postgres-backup
+              image: postgres:18
+              env:
+                - name: PGPASSWORD
+                  value: "postgres"
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  pg_dump -h postgres-dev-postgresql -U postgres -d app > /backup/dev-backup-$(date +%F-%H-%M).sql
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+          volumes:
+            - name: backup-storage
+              emptyDir: {}

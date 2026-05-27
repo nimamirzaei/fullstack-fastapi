@@ -22,3 +22,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: fullstack-fastapi-config
+            - secretRef:
+                name: fullstack-fastapi-secret

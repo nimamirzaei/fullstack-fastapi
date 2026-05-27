@@ -13,4 +13,12 @@ frontend:
   port: 80
 
 ingress:
-  host: fullstack-dev.local
+  host: dev.services-cloud.abrdns.com
+
+secret:
+  postgresPassword: postgres
+  firstSuperuserPassword: admin123
+  secretKey: dev-secret-key
+
+database:
+  host: postgres-dev-postgresql

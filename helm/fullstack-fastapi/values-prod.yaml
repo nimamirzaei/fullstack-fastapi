@@ -13,4 +13,12 @@ frontend:
   port: 80
 
 ingress:
-  host: fullstack-prod.local
+  host: prod.services-cloud.abrdns.com
+
+secret:
+  postgresPassword: prod-postgres-password
+  firstSuperuserPassword: prod-admin-password
+  secretKey: prod-secret-key-change-me
+
+database:
+  host: postgres-prod-postgresql
