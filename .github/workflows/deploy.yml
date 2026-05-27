@@ -1,0 +1,57 @@
+name: CI-CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-dev:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build backend image
+        run: |
+          DOCKER_BUILDKIT=1 docker build \
+            -t nimamrze/fullstack-fastapi-backend:${{ github.sha }} \
+            ./backend
+
+      - name: Build frontend image
+        run: |
+          DOCKER_BUILDKIT=1 docker build \
+            -t nimamrze/fullstack-fastapi-frontend:${{ github.sha }} \
+            ./frontend
+
+      - name: Trivy backend scan
+        run: |
+          trivy image --exit-code 0 \
+            nimamrze/fullstack-fastapi-backend:${{ github.sha }}
+
+      - name: Trivy frontend scan
+        run: |
+          trivy image --exit-code 0 \
+            nimamrze/fullstack-fastapi-frontend:${{ github.sha }}
+
+      - name: Push backend image
+        run: |
+          docker push nimamrze/fullstack-fastapi-backend:${{ github.sha }}
+
+      - name: Push frontend image
+        run: |
+          docker push nimamrze/fullstack-fastapi-frontend:${{ github.sha }}
+
+      - name: Deploy dev
+        run: |
+          helm upgrade --install fullstack-dev \
+            ./helm/fullstack-fastapi \
+            -n dev \
+            -f helm/fullstack-fastapi/values-dev.yaml \
+            --set backend.tag=${{ github.sha }} \
+            --set frontend.tag=${{ github.sha }}
