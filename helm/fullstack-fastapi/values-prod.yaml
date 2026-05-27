@@ -1,0 +1,16 @@
+namespace: prod
+
+backend:
+  image: nimamrze/fullstack-fastapi-backend
+  tag: dev
+  replicas: 2
+  port: 8000
+
+frontend:
+  image: nimamrze/fullstack-fastapi-frontend
+  tag: dev
+  replicas: 2
+  port: 80
+
+ingress:
+  host: fullstack-prod.local
