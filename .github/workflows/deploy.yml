@@ -55,3 +55,24 @@ jobs:
             -f helm/fullstack-fastapi/values-dev.yaml \
             --set backend.tag=${{ github.sha }} \
             --set frontend.tag=${{ github.sha }}
+
+  deploy-prod:
+    needs: deploy-dev
+    runs-on: self-hosted
+
+    environment:
+      name: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy prod
+        run: |
+          helm upgrade --install fullstack-prod \
+            ./helm/fullstack-fastapi \
+            -n prod \
+            -f helm/fullstack-fastapi/values-prod.yaml \
+            --set backend.tag=${{ github.sha }} \
+            --set frontend.tag=${{ github.sha }}
+
